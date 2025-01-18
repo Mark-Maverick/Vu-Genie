@@ -23,13 +23,14 @@
         }
 
         html {
-            height: 550px;
-            border-radius: 20px;
-            width: 400px;
-            padding: 10px 12px;
-            border: 1px solid #fff;
+            height: 450px;
+            border: 1.5px solid #fff;
+            border-radius: 10px;
+            width: 370px;
+            padding: 15px 12px;
         }
-        body{
+
+        body {
             height: 100%;
             width: 100%;
             display: flex;
@@ -100,35 +101,41 @@
         }
 
 
-        /* .btn.hidden{
+        .hidden {
             display: none;
-        } */
+        }
 
         .btns:disabled {
             opacity: 0.7;
             cursor: default;
         }
 
-
-
-        /* .btn.btn--full{
-            width: 100%;
-        } */
-
-
-
-        p {
-            font-size: 12px;
-            margin: 12px 0;
-            text-align: center;
-            text-justify: auto;
+        .btns:disabled {
+            cursor: not-allowed;
         }
 
         .disclaimer {
-            color: red;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #f05050;
+            text-align: center;
+            line-height: 25px;
         }
 
-        .sCursor{
+        .disclaimer::first-letter {
+            color: #ecea74;
+            font-size: 20px;
+        }
+
+        .highlight {
+            background-color: #00ff8023;
+            font-weight: 550;
+            color: #32eb69;
+            padding: 0.1em;
+            border-radius: 3px;
+        }
+
+        .sCursor {
             width: 5px;
             height: 5px;
             border-radius: 50%;
@@ -137,7 +144,8 @@
             pointer-events: none;
             transition: all 0.1s linear;
         }
-        .lCursor{
+
+        .lCursor {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -146,7 +154,6 @@
             pointer-events: none;
             transition: all 0.3s;
         }
-
     </style>
 </head>
 
@@ -158,13 +165,15 @@
             <div class="logo" title="Logo"></div>
             <h1>VU Genie</h1>
         </div>
-        <!-- <p>Version: v<span id="version-string">N/A</span></p> -->
+        <p class="hidden">Version: v<span id="version-string">N/A</span></p>
         <!-- <p>Learn: <a href="#">How to use this extension</a></p> -->
 
         <div class="container">
-            <button id="allow-events" class="btns btn--full" title="Allows you to copy question from the Quiz.">Copy Question</button>
+            <button id="allow-events" class="btns btn--full" title="Allows you to copy question from the Quiz.">Copy
+                Question</button>
             <button id="bypass-video" class="btns btn--full" title="Marks the Lecture as Viewed">Mark Viewed</button>
-            <button id="gdb-copy-paste" class="btns btn--full hidden" disabled title="Allows Copy Paste in Quiz">GDB Copy Paste Enabled</button>
+            <button id="gdb-copy-paste" class="btns btn--full disabled" disabled title="Allows Copy Paste in Quiz">GDB
+                Copy Paste Enabled</button>
         </div>
 
         <!-- <p class="leave-a-review">If you liked this extension, please leave a review.</p>
@@ -176,22 +185,12 @@
         </a> -->
 
         <p class="disclaimer">
-            Disclaimer! Please focus on your study and never rely on such tools. Because it will not help you in future.
+            &#x26A0; Use this extension Responsibly! Focus on your studies—this won't help in exams. <span class="highlight">
+                Success comes from Hard Work, not Shortcuts. </span>
         </p>
     </div>
 
     <script type="module" src="popup.js"></script>
-    <script>
-        let sCursor = document.querySelector('.sCursor');
-        let lCursor = document.querySelector('.lCursor');
-        let body = document.body;
-        body.addEventListener('mousemove', (e)=>{
-            sCursor.style.left = e.x+'px';
-            sCursor.style.top = e.y+'px';
-            lCursor.style.left = (e.x-20)+'px';
-            lCursor.style.top = (e.y-20)+'px';
-        })
-    </script>
 </body>
 
 </html>

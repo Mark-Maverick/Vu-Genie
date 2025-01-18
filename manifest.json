@@ -2,9 +2,9 @@
 "update_url": "http://localhost:5173",
 
   "manifest_version": 3,
-  "name": "VU Quiz Firewall Bypass: Allow GDB & Quiz Copy/Paste - Skip Lesson Videos",
-  "version": "1.0.5",
-  "description": "Enable copy paste on quiz and gdb pages, mark lesson videos as viewed, and bypass VU quiz firewall.",
+  "name": "VU Genie",
+  "version": "1.0.0",
+  "description": "Let's you mark the video as viewed and copy paste on quiz and GDB pages.",
   "minimum_chrome_version": "101",
   "action": {
     "default_icon": "./icon-256.png",
