@@ -53,7 +53,7 @@ document.getElementById("version-string").textContent = chrome.runtime.getManife
                 "True" == a ? l = CurrentPlayer.getDuration() : "True" == u && (l = CurrentLVPlayer.duration);
                 let v = m(120, 180);
                 "True" != a && "True" != u || (v = m(Number(l) / 3, Number(l) / 2)), PageMethods.SaveStudentVideoLog(d, g, p, f, i, v, l, c, s, window.location.href, (function(t) {
-                    UpdateTabStatus(t, n, r), e("Bypassed")
+                    UpdateTabStatus(t, n, r), e("Viewed")
                 }))
             }))
         }
@@ -62,7 +62,7 @@ document.getElementById("version-string").textContent = chrome.runtime.getManife
     }))
 })), document.getElementById("allow-events").addEventListener("click", (async function(e) {
     let t = e.currentTarget || e.target;
-    t.matches("button") || (t = t.closest("button")), showMessage(t, "In Progress"), chrome.scripting.executeScript({
+    t.matches("button") || (t = t.closest("button")), showMessage(t, "Processing"), chrome.scripting.executeScript({
         target: {
             tabId: (await getActiveTab()).id,
             allFrames: !0
