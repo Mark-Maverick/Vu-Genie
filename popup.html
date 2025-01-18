@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VU Genie</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+                "Helvetica Neue", "Ubuntu";
+            background-color: #040D12;
+            color: #fff;
+        }
+
+        html {
+            height: 550px;
+            border-radius: 20px;
+            width: 400px;
+            padding: 10px 12px;
+            border: 1px solid #fff;
+        }
+        body{
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .branding {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .logo {
+            background-color: #F5E8C7;
+            width: 50px;
+            height: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: url('logo.png') no-repeat center;
+            background-size: cover;
+            cursor: pointer;
+            transition: all 0.5s;
+        }
+
+        .logo:hover {
+            box-shadow: 0px 5px 40px #e4e8824d,
+                0px -5px 40px #e4e8824d;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            column-gap: 20px;
+            row-gap: 20px;
+            margin-top: 30px;
+        }
+
+
+
+
+        .btns {
+            width: 60%;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1.5px solid #fff;
+            background-color: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.5s;
+            font-weight: 600;
+        }
+
+        .btns:not(:disabled):hover {
+            background-color: #ddd;
+            color: #040D12;
+            box-shadow: 0px 5px 40px #f0f0f04d,
+                0px -5px 40px #f0f0f04d;
+        }
+
+
+        /* .btn.hidden{
+            display: none;
+        } */
+
+        .btns:disabled {
+            opacity: 0.7;
+            cursor: default;
+        }
+
+
+
+        /* .btn.btn--full{
+            width: 100%;
+        } */
+
+
+
+        p {
+            font-size: 12px;
+            margin: 12px 0;
+            text-align: center;
+            text-justify: auto;
+        }
+
+        .disclaimer {
+            color: red;
+        }
+
+        .sCursor{
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #00ff80;
+            position: fixed;
+            pointer-events: none;
+            transition: all 0.1s linear;
+        }
+        .lCursor{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00ff8023;
+            position: fixed;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="popup">
+        <div class="sCursor"></div>
+        <div class="lCursor"></div>
+        <div class="branding">
+            <div class="logo" title="Logo"></div>
+            <h1>VU Genie</h1>
+        </div>
+        <!-- <p>Version: v<span id="version-string">N/A</span></p> -->
+        <!-- <p>Learn: <a href="#">How to use this extension</a></p> -->
+
+        <div class="container">
+            <button id="allow-events" class="btns btn--full" title="Allows you to copy question from the Quiz.">Copy Question</button>
+            <button id="bypass-video" class="btns btn--full" title="Marks the Lecture as Viewed">Mark Viewed</button>
+            <button id="gdb-copy-paste" class="btns btn--full hidden" disabled title="Allows Copy Paste in Quiz">GDB Copy Paste Enabled</button>
+        </div>
+
+        <!-- <p class="leave-a-review">If you liked this extension, please leave a review.</p>
+
+        <a class="btn btn--full"
+            href="https://chromewebstore.google.com/detail/vu-quiz-firewall-bypass-a/feooibaaamcllnmdojchjccjljdbdmfb/reviews"
+            target="_blank">
+            Rate this extension
+        </a> -->
+
+        <p class="disclaimer">
+            Disclaimer! Please focus on your study and never rely on such tools. Because it will not help you in future.
+        </p>
+    </div>
+
+    <script type="module" src="popup.js"></script>
+    <script>
+        let sCursor = document.querySelector('.sCursor');
+        let lCursor = document.querySelector('.lCursor');
+        let body = document.body;
+        body.addEventListener('mousemove', (e)=>{
+            sCursor.style.left = e.x+'px';
+            sCursor.style.top = e.y+'px';
+            lCursor.style.left = (e.x-20)+'px';
+            lCursor.style.top = (e.y-20)+'px';
+        })
+    </script>
+</body>
+
+</html>
