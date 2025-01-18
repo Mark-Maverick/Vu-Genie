@@ -1,100 +1,141 @@
-let sCursor = document.querySelector('.sCursor');
-        let lCursor = document.querySelector('.lCursor');
-        let body = document.body;
-        body.addEventListener('mousemove', (e)=>{
-            sCursor.style.left = e.x+'px';
-            sCursor.style.top = e.y+'px';
-            lCursor.style.left = (e.x-20)+'px';
-            lCursor.style.top = (e.y-20)+'px';
-        })
+// Cursor behavior
+const smallCursor = document.querySelector('.sCursor');
+const largeCursor = document.querySelector('.lCursor');
 
+document.body.addEventListener('mousemove', (event) => {
+    const { x, y } = event;
+    smallCursor.style.left = `${x}px`;
+    smallCursor.style.top = `${y}px`;
+    largeCursor.style.left = `${x - 20}px`;
+    largeCursor.style.top = `${y - 20}px`;
+});
 
-function getActiveTab() {
-    return chrome.tabs.query({
-        active: !0,
-        currentWindow: !0
-    }).then((e => e[0]))
+// Utility functions
+async function getActiveTab() {
+    const [activeTab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    });
+    return activeTab;
 }
 
-function showMessage(e, t) {
-    e._originalText = e._originalText || e.textContent, e.textContent = t, e.setAttribute("disabled", "true"), clearTimeout(e._timeout), e._timeout = setTimeout((() => {
-        e.textContent = e._originalText, e.removeAttribute("disabled")
-    }), 2e3)
-}
-document.getElementById("version-string").textContent = chrome.runtime.getManifest().version, document.getElementById("bypass-video").addEventListener("click", (async e => {
-    const t = await getActiveTab();
-    let n = e.currentTarget || e.target;
-    if (n.matches("button") || (n = n.closest("button")), !t.url.includes("vulms.vu.edu.pk") || !t.url.includes("LessonViewer.aspx")) return showMessage(n, "Only works on Lesson page.");
-    showMessage(n, "In Progress"), chrome.scripting.executeScript({
-        target: {
-            tabId: t.id
-        },
-        world: "MAIN",
-        func: function() {
-            return new Promise(((e, t) => {
-                const n = $("#hfActiveTab").val().replace("tabHeader", ""),
-                    o = document.querySelector(`li[data-contentid="tab${n}"]`).nextElementSibling,
-                    r = o?.dataset?.contentid?.replace?.("tab", "") ?? "-1",
-                    s = $("#hfIsVideo" + n)?.val();
-                if (!s || "0" == s) return e("Not a video tab");
-                const i = $("#hfContentID" + n).val(),
-                    a = $("#hfIsAvailableOnYoutube" + n).val(),
-                    u = $("#hfIsAvailableOnLocal" + n).val(),
-                    c = $("#hfVideoID" + n).val();
-                let l = "";
-                const d = $("#hfStudentID").val(),
-                    g = $("#hfCourseCode").val(),
-                    p = $("#hfEnrollmentSemester").val(),
-                    f = document.getElementById("MainContent_lblLessonTitle").title.split(":")[0].replace("Lesson", "").trim();
+function showMessage(element, message) {
+    element._originalText = element._originalText || element.textContent;
+    element.textContent = message;
+    element.setAttribute('disabled', 'true');
 
-                function m(e, t) {
-                    return Math.floor(Math.random() * (t - e + 1) + e)
+    clearTimeout(element._timeout);
+    element._timeout = setTimeout(() => {
+        element.textContent = element._originalText;
+        element.removeAttribute('disabled');
+    }, 2000);
+}
+
+// Set version string
+const versionString = document.getElementById('version-string');
+versionString.textContent = chrome.runtime.getManifest().version;
+
+// Bypass video handler
+document.getElementById('bypass-video').addEventListener('click', async (event) => {
+    const activeTab = await getActiveTab();
+    const button = event.target.closest('button');
+
+    if (!activeTab.url.includes('vulms.vu.edu.pk') || !activeTab.url.includes('LessonViewer.aspx')) {
+        return showMessage(button, 'Only works on Lesson page.');
+    }
+
+    showMessage(button, 'In Progress');
+
+    chrome.scripting.executeScript({
+        target: { tabId: activeTab.id },
+        world: 'MAIN',
+        func: () => {
+            return new Promise((resolve) => {
+                const currentTabId = $('#hfActiveTab').val().replace('tabHeader', '');
+                const nextTab = document.querySelector(`li[data-contentid="tab${currentTabId}"]`).nextElementSibling;
+                const nextTabId = nextTab?.dataset?.contentid?.replace('tab', '') || '-1';
+                const isVideoTab = $('#hfIsVideo' + currentTabId)?.val();
+
+                if (!isVideoTab || isVideoTab === '0') {
+                    return resolve('Not a video tab');
                 }
-                "True" == a ? l = CurrentPlayer.getDuration() : "True" == u && (l = CurrentLVPlayer.duration);
-                let v = m(120, 180);
-                "True" != a && "True" != u || (v = m(Number(l) / 3, Number(l) / 2)), PageMethods.SaveStudentVideoLog(d, g, p, f, i, v, l, c, s, window.location.href, (function(t) {
-                    UpdateTabStatus(t, n, r), e("Viewed")
-                }))
-            }))
-        }
-    }).then((e => {
-        "string" == typeof e[0].result && showMessage(n, e[0].result)
-    }))
-})), document.getElementById("allow-events").addEventListener("click", (async function(e) {
-    let t = e.currentTarget || e.target;
-    t.matches("button") || (t = t.closest("button")), showMessage(t, "Processing"), chrome.scripting.executeScript({
-        target: {
-            tabId: (await getActiveTab()).id,
-            allFrames: !0
-        },
-        world: "MAIN",
-        func: function() {
-            if ("function" != typeof window.Node?.prototype?._getEventListeners) return "Not supported";
-            ! function(e) {
-                "function" == typeof e.Element.prototype._getEventListeners && function() {
-                    const t = e.Array.prototype.slice.call(e.document.querySelectorAll("*"));
-                    t.push(e.document), t.push(e);
-                    const n = ["copy", "paste", "cut", "contextmenu", "keyup", "keypress", "keydown", "auxclick"];
-                    let o = [];
-                    for (const e of t) {
-                        if ("function" != typeof e._getEventListeners) continue;
-                        const t = e._getEventListeners();
-                        for (const e in t) {
-                            if (!n.includes(e)) continue;
-                            const r = t[e];
-                            for (const e of r) o.push(e.controller)
-                        }
+
+                const studentID = $('#hfStudentID').val();
+                const courseCode = $('#hfCourseCode').val();
+                const enrollmentSemester = $('#hfEnrollmentSemester').val();
+                const lessonTitle = document.getElementById('MainContent_lblLessonTitle').title.split(':')[0].replace('Lesson', '').trim();
+                const videoDuration = $('#hfContentID' + currentTabId).val();
+                const isAvailableOnYouTube = $('#hfIsAvailableOnYoutube' + currentTabId).val();
+                const isAvailableLocally = $('#hfIsAvailableOnLocal' + currentTabId).val();
+                const videoID = $('#hfVideoID' + currentTabId).val();
+                
+                function getRandomDuration(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1) + min);
+                }
+
+                let duration = '';
+                if (isAvailableOnYouTube === 'True') {
+                    duration = CurrentPlayer.getDuration();
+                } else if (isAvailableLocally === 'True') {
+                    duration = CurrentLVPlayer.duration;
+                }
+
+                let randomDuration = getRandomDuration(120, 180);
+                if (isAvailableOnYouTube === 'True' || isAvailableLocally === 'True') {
+                    randomDuration = getRandomDuration(Number(duration) / 3, Number(duration) / 2);
+                }
+
+                PageMethods.SaveStudentVideoLog(
+                    studentID, courseCode, enrollmentSemester, lessonTitle,
+                    videoDuration, randomDuration, duration, videoID, isVideoTab,
+                    window.location.href, (status) => {
+                        UpdateTabStatus(status, currentTabId, nextTabId);
+                        resolve('Viewed');
                     }
-                    return o
-                }().forEach((e => {
-                    e.abort()
-                }))
-            }(window)
+                );
+            });
         }
-    }).then((e => {
-        const n = e.every((e => "string" == typeof e.result));
-        showMessage(t, n ? "Not supported on this page." : "Done! You can now copy, paste.")
-    }))
-})), getActiveTab().then((e => {
-    "string" == typeof e.url && e.url.includes("vulms.vu.edu.pk") && e.url.includes("GDB/StudentMessage.aspx") && document.getElementById("gdb-copy-paste").classList.remove("hidden")
-}));
+    }).then((results) => {
+        const resultMessage = results[0]?.result || 'Unknown Error';
+        showMessage(button, resultMessage);
+    });
+});
+
+// Allow events handler
+document.getElementById('allow-events').addEventListener('click', async (event) => {
+    const button = event.target.closest('button');
+    showMessage(button, 'Processing');
+
+    chrome.scripting.executeScript({
+        target: { tabId: (await getActiveTab()).id, allFrames: true },
+        world: 'MAIN',
+        func: () => {
+            if (typeof window.Node?.prototype?._getEventListeners !== 'function') {
+                return 'Not supported';
+            }
+
+            const elements = [...document.querySelectorAll('*'), document, window];
+            const restrictedEvents = ['copy', 'paste', 'cut', 'contextmenu', 'keyup', 'keypress', 'keydown', 'auxclick'];
+
+            elements.forEach((el) => {
+                const listeners = el._getEventListeners?.();
+                if (!listeners) return;
+
+                for (const [event, handlers] of Object.entries(listeners)) {
+                    if (!restrictedEvents.includes(event)) continue;
+                    handlers.forEach((handler) => handler.controller.abort());
+                }
+            });
+        }
+    }).then((results) => {
+        const isNotSupported = results.every((res) => typeof res.result === 'string');
+        showMessage(button, isNotSupported ? 'Not supported on this page.' : 'Done! You can now copy, paste.');
+    });
+});
+
+// Handle GDB copy-paste visibility
+getActiveTab().then((activeTab) => {
+    if (activeTab.url.includes('vulms.vu.edu.pk') && activeTab.url.includes('GDB/StudentMessage.aspx')) {
+        document.getElementById('gdb-copy-paste').classList.remove('hidden');
+    }
+});
