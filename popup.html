@@ -18,28 +18,65 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
                 "Helvetica Neue", "Ubuntu";
-            background-color: #040D12;
-            color: #fff;
         }
 
         html {
             height: 450px;
             width: 370px;
             padding: 15px 12px;
-            border: 1px solid #fff;
+            /* border: 1px solid #fff; */
         }
 
         body {
             height: 100%;
             width: 100%;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            padding-bottom: 50px;
+            flex-direction: column;
+            background-color: #040D12;
+            color: #fff;
         }
 
-        .ligrak{
-            width: 30px;
+        .credit{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0px 20px;
         }
+
+        .mark{
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mark::after{
+            content: '';
+            width: 100%;
+            height: 4px;
+            border-radius: 999px;
+            display: block;
+            background: #00ff80;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: all 0.5s;
+        }
+        .mark:hover::after{
+            transform: scaleX(1);
+        }
+
+        .ligdar{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-image: url('Light.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            cursor: pointer;
+        }
+
 
         .branding {
             display: flex;
@@ -82,9 +119,22 @@
         }
 
 
+        .btnl{
+            width: 60%;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1.5px solid #040D12;
+            background-color: transparent;
+            color: #040D12;
+            cursor: pointer;
+            transition: all 0.5s;
+            font-weight: 600;
+            
+        }
 
 
-        .btns {
+
+        .btnd {
             width: 60%;
             padding: 10px 20px;
             border-radius: 50px;
@@ -96,11 +146,18 @@
             font-weight: 600;
         }
 
-        .btns:not(:disabled):hover {
+        .btnd:not(:disabled):hover {
             background-color: #ddd;
             color: #040D12;
             box-shadow: 0px 5px 40px #f0f0f04d,
                 0px -5px 40px #f0f0f04d;
+        }
+
+        .btnl:not(:disabled):hover {
+            background-color: #040D12;
+            color: #ddd;
+            box-shadow: 0px 5px 40px #040d1291,
+                0px -5px 40px #040d1291;
         }
 
 
@@ -108,12 +165,9 @@
             display: none;
         }
 
-        .btns:disabled {
+        button:disabled {
             opacity: 0.7;
             cursor: default;
-        }
-
-        .btns:disabled {
             cursor: not-allowed;
         }
 
@@ -161,13 +215,15 @@
 </head>
 
 <body>
-    <div class="popup">
-        <div class="sCursor"></div>
+    <div class="sCursor"></div>
         <div class="lCursor"></div>
+
         <div class="credit">
             <div class="mark">Mark Maverick</div>
-            <img src="Dark.svg" alt="" class="ligrak">
+            <div class="ligdar"></div>
         </div>
+
+    <div class="popup">
         <div class="branding">
             <div class="logo" title="Logo"></div>
             <h1>VU Genie</h1>
@@ -176,24 +232,16 @@
         <!-- <p>Learn: <a href="#">How to use this extension</a></p> -->
 
         <div class="container">
-            <button id="allow-events" class="btns btn--full" title="Allows you to copy question from the Quiz.">Copy
+            <button id="allow-events" class="btnd btn--full hidden" title="Allows you to copy question from the Quiz.">Copy
                 Question</button>
-            <button id="bypass-video" class="btns btn--full" title="Marks the Lecture as Viewed">Mark Viewed</button>
-            <button id="gdb-copy-paste" class="btns btn--full disabled" disabled title="Allows Copy Paste in Quiz">GDB
+            <button id="bypass-video" class="btnd btn--full" title="Marks the Lecture as Viewed">Mark Viewed</button>
+            <button id="gdb-copy-paste" class="btnd btn--full disabled" disabled title="Allows Copy Paste in Quiz">GDB
                 Copy Paste Enabled</button>
         </div>
 
-        <!-- <p class="leave-a-review">If you liked this extension, please leave a review.</p>
-
-        <a class="btn btn--full"
-            href="https://chromewebstore.google.com/detail/vu-quiz-firewall-bypass-a/feooibaaamcllnmdojchjccjljdbdmfb/reviews"
-            target="_blank">
-            Rate this extension
-        </a> -->
-
         <p class="disclaimer">
-            &#x26A0; Use this extension Responsibly! Focus on your studies—this won't help in exams. <span
-                class="highlight">
+            &#x26A0; Use this extension Responsibly! Focus on your studies—this won't help in exams.
+            <span class="highlight">
                 Success comes from Hard Work, not Shortcuts. </span>
         </p>
     </div>
