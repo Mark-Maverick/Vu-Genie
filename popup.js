@@ -10,35 +10,45 @@ body.addEventListener('mousemove', (e) => {
     lCursor.style.top = (e.y - 20) + 'px';
 })
 
+
 const ligdar = document.querySelector('.ligdar');
 const btn = document.querySelectorAll('button'); 
-let isDarkMode = true; 
 
-ligdar.addEventListener('click', () => {
+// Check localStorage for theme preference, fallback to system preference if not set
+let isDarkMode = localStorage.getItem('isDarkMode') !== null 
+    ? JSON.parse(localStorage.getItem('isDarkMode')) 
+    : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+// Function to apply the theme based on `isDarkMode`
+const applyTheme = () => {
     if (isDarkMode) {
-        // Switch to Light Mode
-        ligdar.style.backgroundImage = `url('Dark.svg')`;
-        // ligdar.style.filter = 'invert(1)';
-        document.body.style.backgroundColor = '#fff';
-        document.body.style.color = '#040D12';
-        btn.forEach((btn) => {
-            btn.classList.remove('btnd'); 
-            btn.classList.add('btnl');  
-        });
-    } else {
-        // Switch to Dark Mode
+        // Dark Mode
         ligdar.style.backgroundImage = `url('Light.svg')`;
-        // ligdar.style.filter = 'invert(1)';
         document.body.style.backgroundColor = '#040D12';
         document.body.style.color = '#fff';
         btn.forEach((btn) => {
             btn.classList.remove('btnl');
             btn.classList.add('btnd');
         });
+    } else {
+        // Light Mode
+        ligdar.style.backgroundImage = `url('Dark.svg')`;
+        document.body.style.backgroundColor = '#fff';
+        document.body.style.color = '#040D12';
+        btn.forEach((btn) => {
+            btn.classList.remove('btnd'); 
+            btn.classList.add('btnl');  
+        });
     }
-    isDarkMode = !isDarkMode; 
-});
+};
 
+applyTheme();
+
+ligdar.addEventListener('click', () => {
+    isDarkMode = !isDarkMode;
+    applyTheme(); 
+    localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode)); 
+});
 
 
 
